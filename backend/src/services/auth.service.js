@@ -44,8 +44,6 @@ let loginService = async (data) => {
 
   let token = generateToken(isExisting._id);
 
-  res.cookie("token", token);
-
   return {
     isExisting,
     token,

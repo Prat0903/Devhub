@@ -10,14 +10,15 @@ let authMiddleware = async (req, res, next) => {
         message: "Unauthorized user",
       });
 
-    let decoded = await jwt.verify(token, process.env.JWT_SECRET);
-
-    if (!decoded)
-      return res.status(401).json({
-        message: "Unauthorized user",
-      });
+    let decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     let user = await UserModel.findById(decoded.id);
+
+    if (!user)
+      return res.status(404).json({
+        message: "User not found",
+      });
+
     req.user = user;
 
     next();
