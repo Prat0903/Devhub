@@ -18,6 +18,27 @@ let userSchema = new mongoose.Schema(
       required: true,
       minLength: [6, "Password must at least 6 characters long"],
     },
+    title: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+    bio: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+    skills: [
+      {
+        type: String,
+        trim: true,
+      },
+    ],
+    github: {
+      type: String,
+      trim: true,
+      default: "",
+    },
   },
   {
     timestamps: true,
