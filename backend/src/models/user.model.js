@@ -28,15 +28,12 @@ let userSchema = new mongoose.Schema(
       trim: true,
       default: "",
     },
-    skills: {
-      type: [
-        {
-          type: String,
-          trim: true,
-        },
-      ],
-      default: [],
-    },
+    skills: [
+      {
+        type: String,
+        trim: true,
+      },
+    ],
     github: {
       type: String,
       trim: true,

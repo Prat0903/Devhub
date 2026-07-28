@@ -1,13 +1,43 @@
 let mongoose = require("mongoose");
 
-let projectSchema = new mongoose.Schema({
-  title: {
-    type: String,
-    required: true,
-    trim: true,
+let projectSchema = new mongoose.Schema(
+  {
+    title: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    description: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    techStack: [
+      {
+        type: String,
+        required: true,
+      },
+    ],
+    owner: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "users",
+      required: true,
+    },
+    githubUrl: {
+      type: String,
+      default: "",
+    },
+    images: [
+      {
+        type: String,
+      },
+    ],
   },
-  title: {
-    type: String,
-    required: true,
+  {
+    timestamps: true,
   },
-});
+);
+
+let ProjectModel = mongoose.model("projects", projectSchema);
+
+module.exports = ProjectModel;
