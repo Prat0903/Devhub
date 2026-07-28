@@ -16,7 +16,7 @@ let updateUserProfileService = async (id, { title, bio, skills, github }) => {
 
   if (title !== undefined) {
     if (title.trim().length < 4)
-      throw new ApiError(400, "Title should be atleast 4 characters lonng");
+      throw new ApiError(400, "Title should be atleast 4 characters long");
     user.title = title;
   }
 
