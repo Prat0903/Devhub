@@ -4,6 +4,6 @@ const updateUserProfileController = require("../controllers/profile.controller")
 
 let router = express.Router();
 
-router.put("/profile", authMiddleware, updateUserProfileController);
+router.patch("/profile", authMiddleware, updateUserProfileController);
 
 module.exports = router;
