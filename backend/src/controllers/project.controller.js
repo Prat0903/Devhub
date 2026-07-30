@@ -14,4 +14,6 @@ let createProjectController = asyncHandler(async (req, res) => {
     );
 });
 
-module.exports = { createProjectController };
+let getProjectController = asyncHandler(async (req, res) => {});
+
+module.exports = { createProjectController, getProjectController };
