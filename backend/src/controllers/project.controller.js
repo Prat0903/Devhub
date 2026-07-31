@@ -14,6 +14,32 @@ let createProjectController = asyncHandler(async (req, res) => {
     );
 });
 
-let getProjectController = asyncHandler(async (req, res) => {});
+let getAllProjectsController = asyncHandler(async (req, res) => {
+  let user = req.user._id;
 
-module.exports = { createProjectController, getProjectController };
+  let projects = await ProjectModel.find({ owner: user });
+
+  return res.status(200).json(new ApiResponse("Projects fetched", projects));
+});
+
+let getProjectByIdController = asyncHandler(async (req, res) => {
+  let id = req.params.id;
+
+  if (!mongoose.Types.ObjectId.isValid(id))
+    throw new ApiError(404, "Invalid project ID");
+
+  let project = await ProjectModel.findOne({
+    _id: id,
+    owner: req.user._id,
+  });
+
+  if (!project) throw new ApiError(404, "Project not found");
+
+  return res.status(200).json(new ApiResponse("Project fetched", project));
+});
+
+module.exports = {
+  createProjectController,
+  getAllProjectsController,
+  getProjectByIdController,
+};
