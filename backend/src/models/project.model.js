@@ -25,7 +25,7 @@ let projectSchema = new mongoose.Schema(
     },
     githubUrl: {
       type: String,
-      default: "",
+      required: true,
     },
     images: [
       {

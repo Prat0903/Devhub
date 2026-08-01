@@ -1,3 +1,4 @@
+const { default: mongoose } = require("mongoose");
 const ProjectModel = require("../models/project.model");
 const { createProjectService } = require("../services/project.service");
 const ApiError = require("../utils/apiError");
@@ -38,8 +39,37 @@ let getProjectByIdController = asyncHandler(async (req, res) => {
   return res.status(200).json(new ApiResponse("Project fetched", project));
 });
 
+let updateProjectController = asyncHandler(async (req, res) => {
+  let id = req.params.id;
+
+  if (!mongoose.Types.ObjectId.isValid(id))
+    throw new ApiError(404, "Invalid project ID");
+
+  let { title, description, techStack, githubUrl, images } = req.body;
+
+  if (!title && !description && !techStack && !githubUrl && !images) {
+    throw new ApiError(
+      400,
+      "At least one field is required to update the project",
+    );
+  }
+
+  let project = await ProjectModel.findOneAndUpdate(
+    { _id: id, owner: req.user._id },
+    { title, description, techStack, githubUrl, images },
+    { new: true },
+  );
+
+  if (!project) throw new ApiError(404, "Project not found");
+
+  return res
+    .status(200)
+    .json(new ApiResponse("Project updated successfully", project));
+});
+
 module.exports = {
   createProjectController,
   getAllProjectsController,
   getProjectByIdController,
+  updateProjectController,
 };
