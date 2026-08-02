@@ -5,6 +5,7 @@ const {
   getAllProjectsController,
   getProjectByIdController,
   updateProjectController,
+  deleteProjectController,
 } = require("../controllers/project.controller");
 
 let router = express.Router();
@@ -13,5 +14,6 @@ router.post("/", authMiddleware, createProjectController);
 router.get("/", authMiddleware, getAllProjectsController);
 router.get("/:id", authMiddleware, getProjectByIdController);
 router.patch("/:id", authMiddleware, updateProjectController);
+router.delete("/:id", authMiddleware, deleteProjectController);
 
 module.exports = router;
