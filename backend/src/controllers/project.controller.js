@@ -1,4 +1,4 @@
-const { default: mongoose } = require("mongoose");
+const mongoose = require("mongoose");
 const ProjectModel = require("../models/project.model");
 const {
   createProjectService,
@@ -55,7 +55,24 @@ let updateProjectController = asyncHandler(async (req, res) => {
     .json(new ApiResponse("Project updated successfully", project));
 });
 
-let deleteProjectController = asyncHandler(async (req, res) => {});
+let deleteProjectController = asyncHandler(async (req, res) => {
+  let id = req.params.id;
+  let user = req.user._id;
+
+  if (!mongoose.Types.ObjectId.isValid(id))
+    throw new ApiError(404, "Invalid project ID");
+
+  let project = await ProjectModel.findOneAndDelete({
+    _id: id,
+    owner: user,
+  });
+
+  if (!project) throw new ApiError(404, "Project not found");
+
+  return res
+    .status(200)
+    .json(new ApiResponse("Project deleted successfully", project));
+});
 
 module.exports = {
   createProjectController,
