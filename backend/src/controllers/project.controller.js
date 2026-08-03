@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const ProjectModel = require("../models/project.model");
 const {
   createProjectService,
-  updateProjectsrvice,
+  updateProjectService,
 } = require("../services/project.service");
 const ApiError = require("../utils/apiError");
 const ApiResponse = require("../utils/apiResponse");
