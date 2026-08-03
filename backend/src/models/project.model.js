@@ -30,6 +30,7 @@ let projectSchema = new mongoose.Schema(
     images: [
       {
         type: String,
+        default: "",
       },
     ],
   },
