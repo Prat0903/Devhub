@@ -1,3 +1,5 @@
+const ApiError = require("../utils/apiError");
+
 let createBlogService = async (
   { title, content, tags, coverImage },
   authorId,
@@ -61,6 +63,9 @@ let updateBlogService = async (
   }
 
   if (coverImage !== undefined) {
+    if (typeof coverImage !== "string") {
+      throw new ApiError(400, "Cover image should be a string");
+    }
     updatedFields.coverImage = coverImage;
   }
 
@@ -69,6 +74,8 @@ let updateBlogService = async (
     updatedFields,
     { new: true, runValidators: true },
   );
+
+  if (!blog) throw new ApiError(404, "Blog not found");
 
   return blog;
 };

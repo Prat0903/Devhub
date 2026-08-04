@@ -52,7 +52,7 @@ let deleteBlogController = asyncHandler(async (req, res) => {
   let id = req.params.id;
 
   if (!mongoose.Types.ObjectId.isValid(id))
-    throw new ApiError(404, "Inavlid blog ID");
+    throw new ApiError(404, "Invalid blog ID");
 
   let blog = await BlogModel.findOneAndDelete({
     _id: id,
