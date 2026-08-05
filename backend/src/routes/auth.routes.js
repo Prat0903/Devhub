@@ -15,3 +15,4 @@ router.post("/logout", logoutController);
 router.get("/me", authMiddleware, getCurrentUserController);
 
 module.exports = router;
+  

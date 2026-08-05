@@ -16,19 +16,27 @@ let createBlogController = asyncHandler(async (req, res) => {
     .json(new ApiResponse("Blog created successfully", { blog: newBlog }));
 });
 
-let getAllBlogsController = asyncHandler(async (req, res) => {
-  let blogs = await BlogModel.find({ author: req.user._id });
+let getMyBlogsController = asyncHandler(async (req, res) => {
+  let user = req.user._id;
+
+  let blogs = await BlogModel.find({ author: user }).populate(
+    "author",
+    "name title",
+  );
 
   return res.status(200).json(new ApiResponse("Blogs fetched", blogs));
 });
 
-let getBlogByIdController = asyncHandler(async (req, res) => {
+let getMyBlogByIdController = asyncHandler(async (req, res) => {
   let id = req.params.id;
 
   if (!mongoose.Types.ObjectId.isValid(id))
     throw new ApiError(404, "Invalid blog ID");
 
-  let blog = await BlogModel.findOne({ _id: id, author: req.user._id });
+  let blog = await BlogModel.findOne({
+    _id: id,
+    author: req.user._id,
+  }).populate("author", "name title");
 
   if (!blog) throw new ApiError(404, "Blog not found");
 
@@ -64,10 +72,37 @@ let deleteBlogController = asyncHandler(async (req, res) => {
   return res.status(200).json(new ApiResponse("Blog deleted", blog));
 });
 
+let getAllBlogsController = asyncHandler(async (req, res) => {
+  let blogs = await BlogModel.find({ published: true }).populate(
+    "author",
+    "name title",
+  );
+
+  return res.status(200).json(new ApiResponse("All blogs fetched", blogs));
+});
+
+let getBlogByIdController = asyncHandler(async (req, res) => {
+  let { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id))
+    throw new ApiError(404, "Invalid blog ID");
+
+  let blog = await BlogModel.findOne({ _id: id, published: true }).populate(
+    "author",
+    "name title",
+  );
+
+  if (!blog) throw new ApiError(404, "Blog not found");
+
+  return res.status(200).json(new ApiResponse("Blog fetched", blog));
+});
+
 module.exports = {
   createBlogController,
-  getAllBlogsController,
-  getBlogByIdController,
+  getMyBlogsController,
+  getMyBlogByIdController,
   updateBlogController,
   deleteBlogController,
+  getAllBlogsController,
+  getBlogByIdController,
 };

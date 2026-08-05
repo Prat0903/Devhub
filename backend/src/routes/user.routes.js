@@ -6,6 +6,7 @@ const {
 
 let router = express.Router();
 
+//public routes
 router.get("/", getAllUserController);
 router.get("/:id", getUserByIdController);
 

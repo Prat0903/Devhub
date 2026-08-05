@@ -84,7 +84,7 @@ let getAllProjectsController = asyncHandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new ApiResponse("All Projects fetched", projects));
+    .json(new ApiResponse("All projects fetched", projects));
 });
 
 let getProjectByIdController = asyncHandler(async (req, res) => {
