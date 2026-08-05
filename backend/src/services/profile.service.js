@@ -27,7 +27,7 @@ let updateUserProfileService = async (id, { title, bio, skills, github }) => {
   }
 
   if (skills !== undefined) {
-    if (skills.length <= 1)
+    if (skills.length < 2)
       throw new ApiError(400, "Need to have atleast 2 skills");
     user.skills = skills;
   }

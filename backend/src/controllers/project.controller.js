@@ -18,15 +18,18 @@ let createProjectController = asyncHandler(async (req, res) => {
     );
 });
 
-let getAllProjectsController = asyncHandler(async (req, res) => {
+let getMyProjectsController = asyncHandler(async (req, res) => {
   let user = req.user._id;
 
-  let projects = await ProjectModel.find({ owner: user });
+  let projects = await ProjectModel.find({ owner: user }).populate(
+    "owner",
+    "name title",
+  );
 
   return res.status(200).json(new ApiResponse("Projects fetched", projects));
 });
 
-let getProjectByIdController = asyncHandler(async (req, res) => {
+let getMyProjectByIdController = asyncHandler(async (req, res) => {
   let id = req.params.id;
 
   if (!mongoose.Types.ObjectId.isValid(id))
@@ -35,7 +38,7 @@ let getProjectByIdController = asyncHandler(async (req, res) => {
   let project = await ProjectModel.findOne({
     _id: id,
     owner: req.user._id,
-  });
+  }).populate("owner", "name title");
 
   if (!project) throw new ApiError(404, "Project not found");
 
@@ -74,10 +77,37 @@ let deleteProjectController = asyncHandler(async (req, res) => {
     .json(new ApiResponse("Project deleted successfully", project));
 });
 
+let getAllProjectsController = asyncHandler(async (req, res) => {
+  let projects = await ProjectModel.find()
+    .select("-images")
+    .populate("owner", "name title");
+
+  return res
+    .status(200)
+    .json(new ApiResponse("All Projects fetched", projects));
+});
+
+let getProjectByIdController = asyncHandler(async (req, res) => {
+  let { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id))
+    throw new ApiError(404, "Invalid project ID");
+
+  let project = await ProjectModel.findById(id)
+    .select("title description techStack owner githubUrl images")
+    .populate("owner", "name title");
+
+  if (!project) throw new ApiError(404, "Project not found");
+
+  return res.status(200).json(new ApiResponse("Project fetched", project));
+});
+
 module.exports = {
   createProjectController,
-  getAllProjectsController,
-  getProjectByIdController,
+  getMyProjectsController,
+  getMyProjectByIdController,
   updateProjectController,
   deleteProjectController,
+  getAllProjectsController,
+  getProjectByIdController,
 };
