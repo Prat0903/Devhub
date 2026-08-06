@@ -5,6 +5,7 @@ const asyncHandler = require("../utils/asyncHandler");
 
 let getAllUserController = asyncHandler(async (req, res) => {
   let users = await UserModel.find().select("name title bio skills github");
+
   return res
     .status(200)
     .json(new ApiResponse("All users fetched successfully", { users }));
